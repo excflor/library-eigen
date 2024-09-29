@@ -8,10 +8,10 @@ export class CreateMembersTable1727602549708 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'uuid',
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: 'increment',
+            generationStrategy: 'uuid',
           },
           {
             name: 'code',
@@ -20,6 +20,7 @@ export class CreateMembersTable1727602549708 implements MigrationInterface {
           {
             name: 'name',
             type: 'varchar',
+            length: '300',
           },
           {
             name: 'penalized',
@@ -27,13 +28,14 @@ export class CreateMembersTable1727602549708 implements MigrationInterface {
             default: false,
           },
           {
-            name: 'createdAt',
-            type: 'timestamp',
+            name: 'created_at',
+            type: 'timestamptz',
             default: 'CURRENT_TIMESTAMP',
           },
           {
-            name: 'updatedAt',
-            type: 'timestamp',
+            name: 'updated_at',
+            type: 'timestamptz',
+            default: 'CURRENT_TIMESTAMP',
             isNullable: true,
           },
         ],

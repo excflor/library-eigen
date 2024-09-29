@@ -1,23 +1,23 @@
-import { ConfigService } from '@nestjs/config';
-import { DataSourceOptions } from 'typeorm';
-import { SeederOptions } from 'typeorm-extension';
-import { join } from 'path';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { CreateMembersTable1727602549708 } from './migrations/1727602549708-CreateMembersTable';
+import * as dotenv from 'dotenv';
+import Member from '../members/entities/member.entity';
 
-export const createDataSource = (
-  configService: ConfigService,
-): DataSourceOptions & SeederOptions => ({
+dotenv.config();
+
+export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: configService.get<string>('DB_HOST'),
-  port: +configService.get<number>('DB_PORT'),
-  username: configService.get<string>('DB_USERNAME'),
-  password: configService.get<string>('DB_PASSWORD'),
-  database: configService.get<string>('DB_NAME'),
-  entities: [join(__dirname, '**', '*.entity.{ts,js}')],
+  host: process.env.DB_HOST,
+  port: +process.env.DB_PORT,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  entities: [Member],
   synchronize: false,
-  migrations: [
-    join(__dirname, 'dist', 'database', 'migrations', '**', '*.entity.{ts,js}'),
-  ],
-  seeds: [
-    join(__dirname, 'dist', 'database', 'seeders', '**', '*.entity.{ts,js}'),
-  ],
-});
+  migrations: [CreateMembersTable1727602549708],
+  migrationsRun: false,
+};
+
+const dataSource = new DataSource(dataSourceOptions);
+
+export default dataSource;

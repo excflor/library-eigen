@@ -3,15 +3,18 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MembersModule } from './members/members.module';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import dataSource from './database/data-source';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    TypeOrmModule.forRoot({
+      ...dataSource.options,
+    }),
     MembersModule,
-    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
