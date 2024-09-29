@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateMembersTable1727602549708 implements MigrationInterface {
+export class CreateBookTable1727614830899 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'members',
+        name: 'books',
         columns: [
           {
             name: 'id',
@@ -16,32 +16,29 @@ export class CreateMembersTable1727602549708 implements MigrationInterface {
           {
             name: 'code',
             type: 'varchar',
+            isUnique: true,
           },
           {
-            name: 'name',
+            name: 'title',
             type: 'varchar',
-            length: '300',
           },
           {
-            name: 'penalizedUntil',
+            name: 'author',
+            type: 'varchar',
+          },
+          {
+            name: 'stock',
+            type: 'int',
+          },
+          {
+            name: 'available',
+            type: 'boolean',
+            default: true,
+          },
+          {
+            name: 'borrowed_at',
             type: 'timestamptz',
-            isNullable: true,
-          },
-          {
-            name: 'created_at',
-            type: 'timestamptz',
-            default: 'CURRENT_TIMESTAMP',
-          },
-          {
-            name: 'updated_at',
-            type: 'timestamptz',
-            default: 'CURRENT_TIMESTAMP',
-          },
-          {
-            name: 'borrowed_books',
-            type: 'text',
-            isNullable: true,
-            isArray: true,
+            isNullable: true, // Allows for null values when not borrowed
           },
         ],
       }),
@@ -49,6 +46,6 @@ export class CreateMembersTable1727602549708 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('members');
+    await queryRunner.dropTable('books');
   }
 }

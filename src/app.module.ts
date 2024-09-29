@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MembersModule } from './members/members.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BooksModule } from './books/books.module';
 import dataSource from './database/data-source';
 
 @Module({
@@ -15,6 +16,7 @@ import dataSource from './database/data-source';
       ...dataSource.options,
     }),
     MembersModule,
+    BooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

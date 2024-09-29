@@ -1,59 +1,61 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, HttpStatus } from '@nestjs/common';
 import { MembersService } from './members.service';
-import { CreateMemberDto } from './dto/create-member.dto';
-import { UpdateMemberDto } from './dto/update-member.dto';
+import { BorrowBookDto, ReturnBookDto } from './dto/member-book.dto';
 
 @Controller('members')
 export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
-  @Post()
-  async create(@Body() createMemberDto: CreateMemberDto) {
-    await this.membersService.create(createMemberDto);
-    const response = {
-      code: HttpStatus.CREATED,
-      message: 'data has been created',
-    };
+  @Post('borrow')
+  async borrowBook(@Body() borrowBookDto: BorrowBookDto) {
+    const result = await this.membersService.borrowBook(
+      borrowBookDto.member_code,
+      borrowBookDto.book_code,
+    );
 
-    return response;
+    return {
+      code: HttpStatus.OK,
+      message: result.message,
+    };
+  }
+
+  @Post('return')
+  async returnBook(@Body() returnBookDto: ReturnBookDto) {
+    const result = await this.membersService.returnBook(
+      returnBookDto.member_code,
+      returnBookDto.book_code,
+    );
+
+    return {
+      code: HttpStatus.OK,
+      message: result.message,
+    };
   }
 
   @Get()
   async findAll() {
     const members = await this.membersService.findAll();
-    const response = {
+
+    return {
       code: HttpStatus.OK,
       message: 'data has been loaded',
-      data: members,
+      data: {
+        members,
+      },
     };
-
-    return response;
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.membersService.findOne(id);
-  }
+  @Get(':code/borrowed-books')
+  async getBorrowedBooks(@Param('code') code: string) {
+    const borrowedBooksCount =
+      await this.membersService.countBorrowedBooks(code);
 
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateMemberDto: UpdateMemberDto,
-  ) {
-    return this.membersService.update(id, updateMemberDto);
-  }
-
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.membersService.remove(id);
+    return {
+      code: HttpStatus.OK,
+      message: 'data has been loaded',
+      data: {
+        count: borrowedBooksCount,
+      },
+    };
   }
 }
