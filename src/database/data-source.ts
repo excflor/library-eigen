@@ -18,7 +18,6 @@ export const dataSourceOptions: DataSourceOptions = {
   synchronize: false,
   migrations: [CreateMembersTable1727602549708, CreateBookTable1727614830899],
   migrationsRun: false,
-  logging: ['query', 'error'],
 };
 
 const dataSource = new DataSource(dataSourceOptions);

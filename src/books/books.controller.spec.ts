@@ -12,7 +12,6 @@ describe('BooksController', () => {
     code: 'ABC123',
     title: 'Sample Book',
     available: true,
-    // other properties...
   };
 
   const mockBooksService = {
